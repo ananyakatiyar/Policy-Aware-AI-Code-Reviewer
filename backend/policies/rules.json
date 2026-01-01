@@ -1,0 +1,57 @@
+[
+    {
+        "id": "no_secrets",
+        "description": "No hardcoded secrets",
+        "severity": "HIGH",
+        "type": "regex",
+        "pattern": "(?i)(api_key|secret|password|token)\\s*=\\s*['\"][a-zA-Z0-9_\\-]{20,}['\"]",
+        "risk_explanation": "Hardcoding secrets poses a severe security risk. If the code is committed to version control, the secret is compromised.",
+        "exploit_scenario": "Attackers scanning public repositories can extract these secrets to gain unauthorized access to your API or database.",
+        "fix_recommendation": "Move secrets to environment variables or a secret management service.",
+        "secure_code_example": "import os\napi_key = os.getenv('API_KEY')"
+    },
+    {
+        "id": "nested_loops",
+        "description": "Limit nested loops",
+        "severity": "MEDIUM",
+        "type": "ast",
+        "max_depth": 3,
+        "risk_explanation": "Deeply nested loops increase time complexity (often O(N^3) or worse), causing performance bottlenecks.",
+        "exploit_scenario": "An attacker could supply a large input that triggers O(N^3) complexity, causing a Denial of Service (DoS) due to CPU exhaustion.",
+        "fix_recommendation": "Refactor nested loops into separate functions or use efficient data structures (e.g., hash maps).",
+        "secure_code_example": "# Use dictionary for O(1) lookups\nlookup = {x.id: x for x in items}\nfor y in other_items: ..."
+    },
+    {
+        "id": "enforce_logging",
+        "description": "Enforce logging",
+        "severity": "LOW",
+        "type": "regex",
+        "pattern": "import\\s+logging|logger\\.",
+        "risk_explanation": "Without logs, debugging production issues is nearly impossible. `print` statements are insufficient for enterprise apps.",
+        "exploit_scenario": "In the event of a breach, forensic analysis is impossible without logs, allowing attackers to cover their tracks.",
+        "fix_recommendation": "Integrate the `logging` module to track application state and errors.",
+        "secure_code_example": "import logging\nlogging.info('Operation started')"
+    },
+    {
+        "id": "blocking_calls",
+        "description": "Avoid blocking calls",
+        "severity": "MEDIUM",
+        "type": "regex",
+        "pattern": "time\\.sleep|requests\\.get",
+        "risk_explanation": "Blocking calls in the main thread (especially in async contexts) freeze the application, making it unresponsive.",
+        "exploit_scenario": "An attacker can flood the server with requests that trigger these blocking calls, exhausting the worker pool and causing a Denial of Service (DoS).",
+        "fix_recommendation": "Offload blocking calls to a background thread or use asynchronous alternatives.",
+        "secure_code_example": "await asyncio.sleep(5)  # Instead of time.sleep(5)"
+    },
+    {
+        "id": "error_handling",
+        "description": "Proper error handling",
+        "severity": "HIGH",
+        "type": "ast",
+        "check": "empty_except",
+        "risk_explanation": "Empty except blocks silence legitimate errors, leading to unpredictable behavior and difficult debugging.",
+        "exploit_scenario": "Attackers can intentionally trigger errors to probe system behavior. Silent failures hide these probes and can lead to logic bypasses.",
+        "fix_recommendation": "Catch specific exceptions and log the error; never use bare `except:` pass.",
+        "secure_code_example": "except ValueError as e:\n    logging.error(f'Invalid input: {e}')"
+    }
+]
