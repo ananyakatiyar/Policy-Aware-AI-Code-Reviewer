@@ -1,158 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Policy-Aware AI Code Reviewer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 80vh;
-        }
-        .auth-card {
-            background: var(--bg-card);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 12px;
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-        .auth-title {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            font-weight: 700;
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-        .form-input {
-            width: 100%;
-            padding: 0.8rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 6px;
-            color: white;
-            font-family: var(--font-main);
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .form-input:focus {
-            border-color: var(--primary-cyan);
-        }
-        .auth-btn {
-            width: 100%;
-            margin-top: 1rem;
-        }
-        .auth-link {
-            display: block;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: var(--primary-cyan);
-            text-decoration: none;
-        }
-        .auth-link:hover {
-            text-decoration: underline;
-        }
-        .error-msg {
-            color: var(--danger);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Login | Policy-Aware AI Code Reviewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      background-color: #0f172a;
+      font-family: Arial, sans-serif;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-container {
+      background: #020617;
+      padding: 30px;
+      width: 350px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #38bdf8;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #22d3ee;
+      color: #020617;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #38bdf8;
+    }
+
+    .logout-btn {
+      margin-top: 10px;
+      background: transparent;
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+    }
+
+    .logout-btn:hover {
+      background: #38bdf8;
+      color: #020617;
+    }
+
+    .error {
+      color: #f87171;
+      font-size: 14px;
+      margin-bottom: 10px;
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="background-effects">
-        <div class="grid-overlay"></div>
-        <div class="glow-spot"></div>
+  <div class="login-container">
+    <h2>Login</h2>
+
+    <!-- NEW: client-side validation message -->
+    <div id="errorMsg" class="error">
+      Please enter both email and password.
     </div>
 
-    <nav class="navbar">
-        <div class="logo-section">
-            <div class="logo-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="url(#paint0_linear)" fill-opacity="0.2"/>
-                    <path d="M12 18V6" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M12 6L16 10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M12 6L8 10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                    <defs>
-                        <linearGradient id="paint0_linear" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#00F0FF"/>
-                            <stop offset="1" stop-color="#BD00FF"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
-            </div>
-            <div class="logo-text">
-                <span class="brand-name">Policy-Aware</span> <span class="brand-sub">AI Code Reviewer</span>
-            </div>
-        </div>
-    </nav>
+    <form onsubmit="handleLogin(event)">
+      <input
+        type="email"
+        id="email"
+        placeholder="Email"
+        required
+      />
 
-    <main class="container auth-container">
-        <div class="auth-card">
-            <h2 class="auth-title">Login</h2>
-            <div id="errorMsg" class="error-msg"></div>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="email" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="password" class="form-input" required>
-                </div>
-                <button type="submit" class="primary-btn auth-btn">
-                    Sign In
-                </button>
-            </form>
-            <a href="register.html" class="auth-link">Don't have an account? Register</a>
-        </div>
-    </main>
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        required
+      />
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorMsg = document.getElementById('errorMsg');
+      <button type="submit">Login</button>
+    </form>
 
-            try {
-                const response = await fetch('/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
+    <!-- NEW: logout button -->
+    <button type="button" class="logout-btn" onclick="handleLogout()">
+      Logout
+    </button>
+  </div>
 
-                if (response.ok) {
-                    const data = await response.json();
-                    localStorage.setItem('token', data.access_token);
-                    window.location.href = '/';
-                } else {
-                    const err = await response.json();
-                    errorMsg.textContent = err.detail || 'Login failed';
-                    errorMsg.style.display = 'block';
-                }
-            } catch (error) {
-                errorMsg.textContent = 'Server unavailable';
-                errorMsg.style.display = 'block';
-            }
-        });
-    </script>
+  <script>
+    // NEW: simple client-side validation
+    function handleLogin(event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (!email || !password) {
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      errorMsg.style.display = "none";
+      alert("Login request submitted");
+    }
+
+    // NEW: logout handler
+    function handleLogout() {
+      alert("Logged out successfully");
+    }
+  </script>
 </body>
 </html>
