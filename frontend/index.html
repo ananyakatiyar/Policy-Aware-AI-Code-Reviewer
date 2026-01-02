@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policy-Aware AI Code Reviewer</title>
+    <!-- Fonts: Using system fonts for offline capability and performance -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="grid-overlay"></div>
+        <div class="glow-spot"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="url(#paint0_linear)" fill-opacity="0.2"/>
+                    <path d="M12 18V6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 6L16 10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 6L8 10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="paint0_linear" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#00F0FF"/>
+                            <stop offset="1" stop-color="#BD00FF"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="logo-text">
+                <span class="brand-name">Policy-Aware</span> <span class="brand-sub">AI Code Reviewer</span>
+                <div class="tagline">Enterprise-grade static analysis with intelligent reasoning</div>
+            </div>
+        </div>
+        <div class="status-badge" id="statusBadge">
+            <span class="status-dot"></span> AI Engine Active
+        </div>
+        <div id="userSection" class="user-profile" style="display: none;">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="hero-section">
+            <div class="ai-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path></svg>
+                AI-Powered Analysis Engine
+            </div>
+            <h1>Analyze Your Code <span class="gradient-text">Intelligently</span></h1>
+            <p class="hero-desc">Paste your code, configure policies, and let our AI detect security vulnerabilities and code quality issues in seconds.</p>
+        </div>
+
+        <div class="code-panel">
+            <div class="panel-header">
+                <div class="file-info">
+                    <span class="file-icon"></span> Code Input
+                </div>
+                <div class="diff-toggle-wrapper" style="display: flex; align-items: center; gap: 8px; margin-left: auto; margin-right: 16px;">
+                    <label class="switch" style="position: relative; display: inline-block; width: 36px; height: 20px;">
+                        <input type="checkbox" id="diffModeToggle" style="opacity: 0; width: 0; height: 0;">
+                        <span class="slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px;"></span>
+                        <style>
+                            .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
+                            input:checked + .slider { background-color: #bd00ff; }
+                            input:checked + .slider:before { transform: translateX(16px); }
+                        </style>
+                    </label>
+                    <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-secondary);">Diff Mode</span>
+                </div>
+                <div class="file-name">Paste or type your code for analysis</div>
+            </div>
+            <div class="editor-container">
+                <div id="originalCodeSection" class="editor-section hidden" style="border-bottom: 1px solid var(--border-color); display: none;">
+                    <div class="editor-header" style="background: rgba(0,0,0,0.2);">
+                        <div class="filename">Original Code</div>
+                    </div>
+                    <div class="editor-body">
+                         <textarea id="originalCodeInput" class="code-textarea" spellcheck="false" placeholder="Paste original code here for diff analysis..." style="height: 150px;"></textarea>
+                    </div>
+                </div>
+                <div class="editor-header">
+                    <div class="window-controls">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <div class="filename">untitled.py</div>
+                    <button class="copy-btn">Copy</button>
+                </div>
+                <div class="editor-body">
+                    <div class="line-numbers">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15
+                    </div>
+                    <textarea id="codeInput" class="code-textarea" spellcheck="false">
+def process_user_data(user_input):
+    # TODO: Add validation
+    import os
+    api_key = os.getenv("STRIPE_API_KEY")  # Use env var; do not hardcode secrets
+    
+    results = []
+    for i in range(len(user_input)):
+        for j in range(len(user_input[i])):
+            for k in range(len(user_input[i][j])):
+                # Deeply nested loop
+                print(user_input[i][j][k])
+                
+    try:
+        connect_db()
+    except:
+        pass # Empty except block
+        
+    import time
+    time.sleep(5) # Blocking call
+    
+    return results
+</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="policy-panel">
+            <div class="panel-header">
+                <div class="file-info">
+                    <span class="shield-icon"></span> Policy Configuration
+                </div>
+                <div class="active-count">Active Policies <span id="activePolicyCount">4</span> / 6</div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 66%"></div>
+            </div>
+
+            <div class="policy-list">
+                <!-- Policies will be dynamically managed or static for now -->
+                <div class="policy-item active">
+                    <label class="checkbox-container">
+                        <input type="checkbox" checked data-policy="no_secrets">
+                        <span class="checkmark"></span>
+                        No hardcoded secrets
+                    </label>
+                    <span class="badge high">HIGH</span>
+                </div>
+
+                <div class="policy-item active">
+                    <label class="checkbox-container">
+                        <input type="checkbox" checked data-policy="nested_loops">
+                        <span class="checkmark"></span>
+                        Limit nested loops
+                    </label>
+                    <span class="badge medium">MEDIUM</span>
+                </div>
+
+                <div class="policy-item active">
+                    <label class="checkbox-container">
+                        <input type="checkbox" checked data-policy="enforce_logging">
+                        <span class="checkmark"></span>
+                        Enforce logging
+                    </label>
+                    <span class="badge low">LOW</span>
+                </div>
+
+                <div class="policy-item active">
+                    <label class="checkbox-container">
+                        <input type="checkbox" checked data-policy="blocking_calls">
+                        <span class="checkmark"></span>
+                        Avoid blocking calls
+                    </label>
+                    <span class="badge medium">MEDIUM</span>
+                </div>
+
+                <div class="policy-item">
+                    <label class="checkbox-container">
+                        <input type="checkbox" data-policy="error_handling">
+                        <span class="checkmark"></span>
+                        Proper error handling
+                    </label>
+                    <span class="badge high">HIGH</span>
+                </div>
+
+                <div class="policy-item">
+                    <label class="checkbox-container">
+                        <input type="checkbox" data-policy="type_annotations">
+                        <span class="checkmark"></span>
+                        Type annotations
+                    </label>
+                    <span class="badge low">LOW</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-area">
+            <button id="runReviewBtn" class="primary-btn">
+                <span class="btn-icon">▶</span> Run AI Review
+                <span class="sparkle-icon">✨</span>
+            </button>
+        </div>
+
+        <!-- Error Panel: displays API errors such as 401 Unauthorized -->
+        <div id="errorPanel" class="error-panel hidden" style="display:none;">
+            <div class="error-content">
+                <strong id="errorTitle">Error</strong>
+                <div id="errorMessage">An unexpected error occurred.</div>
+                <div id="errorActions" style="margin-top:8px;"></div>
+            </div>
+        </div>
+
+        <div id="resultsSection" class="results-section hidden">
+            <div class="risk-score-card">
+                <div class="score-circle-container">
+                    <div class="score-circle">
+                        <span class="score-value" id="riskScore">0</span>
+                        <span class="score-max">/ 100</span>
+                    </div>
+                    <div class="score-ring"></div>
+                </div>
+                <div class="risk-label">
+                    <span id="riskLevel">Calculating...</span>
+                    <div class="risk-sub">Overall Code Risk Score</div>
+                </div>
+            </div>
+
+            <div class="audit-summary-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span class="icon">📄</span> Audit Summary
+                    </div>
+                    <button id="exportBtn" class="export-btn">Export PDF</button>
+                </div>
+                
+                <div class="summary-stats">
+                    <div class="stat-box warning">
+                        <div class="stat-icon">!</div>
+                        <div class="stat-text">
+                            <div class="stat-label">Critical Issues</div>
+                            <div class="stat-sub">Immediate action needed</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <span class="icon">🕒</span>
+                            <div class="meta">
+                                <div class="label">Timestamp</div>
+                                <div class="value" id="timestamp">--</div>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="icon">file</span>
+                            <div class="meta">
+                                <div class="label">File</div>
+                                <div class="value">untitled.py</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-row metrics">
+                        <div class="metric">
+                            <span class="value" id="violationCount">0</span>
+                            <span class="label">Violations</span>
+                        </div>
+                        <div class="metric">
+                            <span class="value" id="riskScoreDisplay">0</span>
+                            <span class="label">Risk Score</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="violations-list" id="violationsList">
+                <!-- Violations will be injected here -->
+            </div>
+        </div>
+
+        <!-- Diff Preview Section: shows original vs modified with highlights -->
+        <div id="diffPreviewSection" class="diff-preview hidden" style="display:none; margin-top:16px;">
+            <div class="panel-header">
+                <div class="file-info">
+                    <span class="file-icon"></span> Diff Preview
+                </div>
+                <div class="file-name" id="diffFileName">diff_preview.py</div>
+            </div>
+            <div class="diff-body" style="display:flex; gap:12px;">
+                <div style="flex:1;">
+                    <div class="sub-header">Original</div>
+                    <pre id="diffOriginal" class="code-block" style="height:200px; overflow:auto; background:#0b0b0b; color:#fff; padding:12px; border-radius:6px;"></pre>
+                </div>
+                <div style="flex:1;">
+                    <div class="sub-header">Modified</div>
+                    <pre id="diffModified" class="code-block" style="height:200px; overflow:auto; background:#0b0b0b; color:#fff; padding:12px; border-radius:6px;"></pre>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
