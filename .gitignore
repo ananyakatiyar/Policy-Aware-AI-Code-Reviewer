@@ -1,5 +1,14 @@
+# virtual environment
 venv/
+
+# database
+*.db
+
+# cache
 __pycache__/
+
+# secrets
 .env
-*.pyc
-node_modules/
+
+# reports (optional – recommended)
+*.pdf
